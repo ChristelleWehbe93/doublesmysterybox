@@ -179,11 +179,40 @@
             margin: 20px 0
         }
 
-        .question input {
-            max-width: 180px;
-            width: 100%;
-            text-align: center;
-            font-size: 26px
+        .choices {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin: 20px auto;
+            max-width: 520px
+        }
+
+        .choice {
+            font-size: clamp(22px, 5vw, 32px);
+            padding: 20px 8px;
+            background: #e9f3ff;
+            color: #0065b5;
+            border: 2px solid #b7d9fa
+        }
+
+        .choice:hover:not(:disabled) {
+            background: #cce8ff
+        }
+
+        .choice:disabled {
+            opacity: 1
+        }
+
+        .choice.correct {
+            background: #dcfaef;
+            border-color: #0dc28a;
+            color: #087f5b
+        }
+
+        .choice.wrong {
+            background: #ffe3e3;
+            border-color: #ef7777;
+            color: #a52727
         }
 
         .hint {
@@ -261,9 +290,9 @@
             <div id="question" class="question hidden">
                 <div class="hint" id="boxTitle"></div>
                 <div class="equation" id="equation"></div>
-                <p class="hint" id="whisper"></p><label for="answer">Your answer</label>
-                <div style="margin:12px"><input id="answer" type="number" inputmode="numeric" autocomplete="off"></div>
-                <button id="check">Reveal Answer & Points ✨</button>
+                <p class="hint" id="whisper"></p>
+                <p class="hint">Choose the correct answer:</p>
+                <div id="choices" class="choices" role="group" aria-label="Answer choices"></div>
             </div>
             <div id="result" class="question hidden">
                 <div class="equation" id="solution"></div>
@@ -275,10 +304,11 @@
             </div>
         </section>
         <div class="actions"><button class="secondary" id="restart">↻ Restart with New Questions</button></div>
-        <p class="small">All points are hidden until an answer is checked. Each round shuffles questions and points.</p>
+        <p class="small">All points are hidden until an answer is checked. Each round shuffles questions, answer
+            choices, and points.</p>
     </main>
     <script>
-        (() => { 'use strict'; const $ = id => document.getElementById(id); const values = { easy: 10, medium: 12, challenge: 20 }; let game, round = 0; function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { let j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]] } return a } function newGame() { round++; const mode = $('mode').value, limit = values[$('difficulty').value]; let nums = shuffle(Array.from({ length: limit + 1 }, (_, i) => i)); while (nums.length < 12) nums.push(...shuffle(Array.from({ length: limit + 1 }, (_, i) => i)).slice(0, 12 - nums.length)); game = { mode, facts: nums.slice(0, 12).map(n => ({ n, points: [10, 20, 30, 40, 50][Math.floor(Math.random() * 5)] })), opened: [], turn: 0, score: [0, 0], selected: null, stage: 'boxes' }; render() } function render() { const solo = game.mode === 'solo'; $('scores').innerHTML = solo ? `<div class="score solo">⭐ Your Points<strong>${game.score[0]}</strong></div>` : `<div class="score blue">🔵 Team Blue<strong>${game.score[0]}</strong></div><div class="score green">🟢 Team Green<strong>${game.score[1]}</strong></div>`; $('turn').textContent = game.stage === 'finished' ? '🏆 Round Complete!' : solo ? '⭐ Your Turn!' : game.turn === 0 ? '🔵 Team Blue — Your Turn!' : '🟢 Team Green — Your Turn!'; $('progress').textContent = `${game.opened.length} of 12 boxes opened · Round ${round}`; for (const id of ['boxes', 'question', 'result', 'finished']) $(id).classList.toggle('hidden', game.stage !== id); if (game.stage === 'boxes') { $('boxes').innerHTML = ''; game.facts.forEach((f, i) => { const b = document.createElement('button'); b.className = 'box' + (game.opened.includes(i) ? ' opened' : ''); b.disabled = game.opened.includes(i); b.innerHTML = `<span class="emoji">${b.disabled ? '✅' : '🎁'}</span><span>${b.disabled ? 'Opened' : 'Box ' + (i + 1)}</span>`; b.addEventListener('click', () => { game.selected = i; game.stage = 'question'; $('answer').value = ''; render(); $('answer').focus() }); $('boxes').append(b) }) } if (game.stage === 'question') { let f = game.facts[game.selected]; $('boxTitle').textContent = '🎁 MYSTERY BOX ' + (game.selected + 1); $('equation').textContent = `${f.n} + ${f.n} = ?`; $('whisper').textContent = solo ? 'Say the doubles fact aloud before answering!' : '🤫 Let the whole team whisper the doubles fact together!' } if (game.stage === 'finished') $('winner').textContent = solo ? `⭐ You earned ${game.score[0]} points!` : game.score[0] === game.score[1] ? '🤝 It’s a tie!' : game.score[0] > game.score[1] ? '🔵 Team Blue Wins!' : '🟢 Team Green Wins!' } function check() { if (game.stage !== 'question') return; const raw = $('answer').value.trim(); if (raw === '') { $('answer').focus(); return } const f = game.facts[game.selected], correct = Number(raw) === f.n * 2; if (correct) game.score[game.mode === 'solo' ? 0 : game.turn] += f.points; game.opened.push(game.selected); $('solution').textContent = `${f.n} + ${f.n} = ${f.n * 2}`; $('feedback').textContent = correct ? `🎉 Correct! +${f.points} mystery points!` : `The correct answer is ${f.n * 2}. No points this turn.`; game.stage = 'result'; render() } function next() { game.selected = null; if (game.mode === 'teams') game.turn = 1 - game.turn; game.stage = game.opened.length === 12 ? 'finished' : 'boxes'; render() } $('check').addEventListener('click', check); $('answer').addEventListener('keydown', e => { if (e.key === 'Enter') check() }); $('next').addEventListener('click', next); $('restart').addEventListener('click', newGame); $('again').addEventListener('click', newGame); $('mode').addEventListener('change', newGame); $('difficulty').addEventListener('change', newGame); newGame() })();
+        (() => { 'use strict'; const $ = id => document.getElementById(id); const values = { easy: 10, medium: 12, challenge: 20 }; let game, round = 0; function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { let j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]] } return a } function makeChoices(n, limit) { const correct = n * 2; const candidates = shuffle(Array.from({ length: limit + 1 }, (_, i) => i * 2).filter(v => v !== correct)); return shuffle([correct, ...candidates.slice(0, 2)]) } function newGame() { round++; const mode = $('mode').value, limit = values[$('difficulty').value]; let nums = shuffle(Array.from({ length: limit + 1 }, (_, i) => i)); while (nums.length < 12) nums.push(...shuffle(Array.from({ length: limit + 1 }, (_, i) => i)).slice(0, 12 - nums.length)); game = { mode, facts: nums.slice(0, 12).map(n => ({ n, points: [10, 20, 30, 40, 50][Math.floor(Math.random() * 5)] })), opened: [], turn: 0, score: [0, 0], selected: null, stage: 'boxes' }; render() } function render() { const solo = game.mode === 'solo'; $('scores').innerHTML = solo ? `<div class="score solo">⭐ Your Points<strong>${game.score[0]}</strong></div>` : `<div class="score blue">🔵 Team Blue<strong>${game.score[0]}</strong></div><div class="score green">🟢 Team Green<strong>${game.score[1]}</strong></div>`; $('turn').textContent = game.stage === 'finished' ? '🏆 Round Complete!' : solo ? '⭐ Your Turn!' : game.turn === 0 ? '🔵 Team Blue — Your Turn!' : '🟢 Team Green — Your Turn!'; $('progress').textContent = `${game.opened.length} of 12 boxes opened · Round ${round}`; for (const id of ['boxes', 'question', 'result', 'finished']) $(id).classList.toggle('hidden', game.stage !== id); if (game.stage === 'boxes') { $('boxes').innerHTML = ''; game.facts.forEach((f, i) => { const b = document.createElement('button'); b.className = 'box' + (game.opened.includes(i) ? ' opened' : ''); b.disabled = game.opened.includes(i); b.innerHTML = `<span class="emoji">${b.disabled ? '✅' : '🎁'}</span><span>${b.disabled ? 'Opened' : 'Box ' + (i + 1)}</span>`; b.addEventListener('click', () => { game.selected = i; game.stage = 'question'; game.choices = makeChoices(game.facts[i].n, values[$('difficulty').value]); render() }); $('boxes').append(b) }) } if (game.stage === 'question') { let f = game.facts[game.selected]; $('boxTitle').textContent = '🎁 MYSTERY BOX ' + (game.selected + 1); $('equation').textContent = `${f.n} + ${f.n} = ?`; $('whisper').textContent = solo ? 'Say the doubles fact aloud before answering!' : '🤫 Let the whole team whisper the doubles fact together!'; $('choices').innerHTML = ''; game.choices.forEach(value => { const b = document.createElement('button'); b.className = 'choice'; b.textContent = value; b.addEventListener('click', () => check(value)); $('choices').appendChild(b) }) } if (game.stage === 'finished') $('winner').textContent = solo ? `⭐ You earned ${game.score[0]} points!` : game.score[0] === game.score[1] ? '🤝 It’s a tie!' : game.score[0] > game.score[1] ? '🔵 Team Blue Wins!' : '🟢 Team Green Wins!' } function check(value) { if (game.stage !== 'question') return; const f = game.facts[game.selected], correct = value === f.n * 2; if (correct) game.score[game.mode === 'solo' ? 0 : game.turn] += f.points; game.opened.push(game.selected); $('solution').textContent = `${f.n} + ${f.n} = ${f.n * 2}`; $('feedback').textContent = correct ? `🎉 Correct! +${f.points} mystery points!` : `You chose ${value}. The correct answer is ${f.n * 2}. No points this turn.`; game.stage = 'result'; render() } function next() { game.selected = null; if (game.mode === 'teams') game.turn = 1 - game.turn; game.stage = game.opened.length === 12 ? 'finished' : 'boxes'; render() } $('next').addEventListener('click', next); $('restart').addEventListener('click', newGame); $('again').addEventListener('click', newGame); $('mode').addEventListener('change', newGame); $('difficulty').addEventListener('change', newGame); newGame() })();
     </script>
 </body>
 
