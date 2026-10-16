@@ -22,16 +22,16 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-950 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950 via-slate-900 to-slate-950 p-6 flex flex-col items-center justify-center font-sans text-slate-100 relative overflow-hidden">
+  <div class="min-h-screen   bg-gradient-to-br   from-blue-600 via-sky-500 to-emerald-500 p-6 flex flex-col items-center justify-center font-sans text-white relative overflow-hidden">
     
-    <!-- Ambient Space Glow Background Elements -->
-    <div class="absolute top-12 left-1/4 w-72 h-72 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <!-- Playful blobs -->
+      <div class="absolute top-12 left-1/4 w-72 h-72 bg-yellow-300/30 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl pointer-events-none"></div>
 
     <!-- Header -->
     <div class="flex items-center gap-3 mb-10 z-10">
       <span class="text-3xl drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]">🏆</span>
-      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 bg-clip-text text-transparent drop-shadow-sm comic-relief-bold">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-200 bg-clip-text text-transparent drop-shadow-md comic-relief-bold">
         Math Champions
       </h1>
     </div>
@@ -51,8 +51,8 @@
             <span class="text-6xl relative drop-shadow-md">{{ g.emoji }}</span>
           </div>
           
-          <h2 class="text-2xl font-bold text-center text-slate-900 mb-1">{{ g.title }}</h2>
-          <p class="text-sm font-medium text-center text-slate-500 mb-6">{{ g.desc }}</p>
+          <h2 class="comic-relief-bold text-2xl font-bold text-center text-slate-900 mb-1">{{ g.title }}</h2>
+          <p class="comic-relief-regular text-sm font-medium text-center text-slate-500 mb-6">{{ g.desc }}</p>
           
           <!-- Card 1 specific: Progress Bar -->
           <div v-if="g.type === 'progress'" class="flex items-center gap-3 mb-6 bg-slate-50 p-3 rounded-2xl border border-slate-100">
