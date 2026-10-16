@@ -1,4 +1,5 @@
 <script setup>
+  import Background from './Background.vue'
   const games = [
     { 
       id: 'mystery_doubles', 
@@ -11,7 +12,7 @@
     },
     { 
       id: 'road_to_20', 
-      emoji: '🚀', 
+      emoji: '🌈', 
       title: 'The Road to 20', 
       desc: 'Grade 2 Math Adventure',
       type: 'track',
@@ -22,16 +23,13 @@
 </script>
 
 <template>
-  <div class="min-h-screen   bg-gradient-to-br   from-blue-600 via-sky-500 to-emerald-500 p-6 flex flex-col items-center justify-center font-sans text-white relative overflow-hidden">
-    
-      <!-- Playful blobs -->
-      <div class="absolute top-12 left-1/4 w-72 h-72 bg-yellow-300/30 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-cyan-200/30 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="min-h-screen p-6 flex flex-col items-center justify-center font-sans text-white relative overflow-hidden">
+    <Background />
 
     <!-- Header -->
     <div class="flex items-center gap-3 mb-10 z-10">
       <span class="text-3xl drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]">🏆</span>
-      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wide bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-200 bg-clip-text text-transparent drop-shadow-md comic-relief-bold">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-wide text-[#26325b] [text-shadow:0_2px_0_white] comic-relief-bold">
         Math Champions
       </h1>
     </div>
@@ -70,7 +68,7 @@
               <div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[10px] px-1.5 py-0.5 rounded-full shadow">10</div>
             </div>
             <div class="w-7 h-7 rounded-full bg-amber-300 border border-amber-500 flex items-center justify-center shadow-sm">20</div>
-            <span class="text-lg ml-2">🪐</span>
+            <span class="text-lg ml-2">✨</span>
           </div>
         </div>
 

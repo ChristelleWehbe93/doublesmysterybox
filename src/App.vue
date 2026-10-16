@@ -23,7 +23,7 @@
 <template>
   <div class="min-h-screen bg-[#eef4fb] text-[#203047]" :class="{ 'p-3 sm:p-5': games[hash] }">
     <main :class="{ 'mx-auto max-w-3xl': games[hash] }">
-      <a v-if="games[hash]" href="/" class="mb-2 inline-block font-bold text-blue-700">← All games</a>
+      <a v-if="games[hash]" href="/" class="relative z-10 mb-2 inline-block font-bold text-blue-700">← All games</a>
       <component :is="games[hash] || Home" />
     </main>
   </div>
