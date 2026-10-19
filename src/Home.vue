@@ -19,6 +19,24 @@
       buttonText: 'Start',
       buttonBg: 'from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 shadow-[0_4px_14px_rgba(217,119,6,0.4)]'
     },
+    { 
+      id: 'sum_battle', 
+      emoji: '🐊', 
+      title: 'Sum Battle', 
+      desc: 'Grade 2 Team Challenge',
+      type: 'battle',
+      buttonText: 'Start',
+      buttonBg: 'from-sky-700 to-sky-600 hover:from-sky-600 hover:to-sky-500 shadow-[0_4px_14px_rgba(2,132,199,0.4)]'
+    },
+    { 
+      id: 'ten_quest', 
+      emoji: '🚀', 
+      title: 'Ten Quest', 
+      desc: 'Grade 2 Subtraction Race',
+      type: 'quest',
+      buttonText: 'Start',
+      buttonBg: 'from-indigo-700 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 shadow-[0_4px_14px_rgba(79,70,229,0.4)]'
+    },
   ]
 </script>
 
@@ -69,6 +87,19 @@
             </div>
             <div class="w-7 h-7 rounded-full bg-amber-300 border border-amber-500 flex items-center justify-center shadow-sm">20</div>
             <span class="text-lg ml-2">✨</span>
+          </div>
+
+          <!-- Card 3 specific: Team scores -->
+          <div v-if="g.type === 'battle'" class="flex items-center justify-between mb-6 bg-slate-50 py-3 px-4 rounded-2xl border border-slate-100 text-sm font-bold">
+            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full">🔴 Red</span>
+            <span class="text-lg">⚖️</span>
+            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">🟡 Yellow</span>
+          </div>
+
+          <!-- Card 4 specific: Subtraction -->
+          <div v-if="g.type === 'quest'" class="flex items-center justify-center gap-3 mb-6 bg-slate-50 py-3 px-4 rounded-2xl border border-slate-100 text-sm font-bold text-slate-600">
+            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">17 − 7 = ?</span>
+            <span class="text-lg">🪐</span>
           </div>
         </div>
 

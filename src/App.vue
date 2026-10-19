@@ -3,10 +3,12 @@
   import Home from './Home.vue'
   import Doubles from './Doubles.vue'
   import RoadTo20 from './RoadTo20.vue'
+  import SumBattle from './SumBattle.vue'
+  import TenQuest from './TenQuest.vue'
 
   // ponytail: History API routing, swap for vue-router if you need params/nesting
-  const games = { mystery_doubles: Doubles, road_to_20: RoadTo20 }
-  const titles = { mystery_doubles: 'Mystery Doubles', road_to_20: 'The Road to 20' }
+  const games = { mystery_doubles: Doubles, road_to_20: RoadTo20,   sum_battle: SumBattle, ten_quest: TenQuest }
+    const titles = { mystery_doubles: 'Mystery Doubles', road_to_20: 'The Road to 20', sum_battle: 'Sum Battle', ten_quest: 'Ten Quest' }
   const hash = ref(location.pathname.slice(1))
   addEventListener('popstate', () => (hash.value = location.pathname.slice(1)))
   // client-side navigation for same-origin links, no page reload
