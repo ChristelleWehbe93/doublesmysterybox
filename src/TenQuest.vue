@@ -50,6 +50,7 @@ function makeQuestion(level, used) {
 
 const level = ref('medium')
 const questions = ref([])
+const points = ref([])
 const done = ref(new Set())
 const turn = ref(0)
 const scores = ref([0, 0])
@@ -106,6 +107,11 @@ function newGame(lv = level.value) {
   level.value = lv
   const used = new Set()
   questions.value = Array.from({ length: TOTAL }, () => makeQuestion(lv, used))
+  points.value = []
+  for (let i = 0; i < TOTAL; i++) {
+    const pool = [5, 10, 15, 20, 25, 30].filter((n) => n !== points.value[i - 1])
+    points.value.push(pool[rand(0, pool.length - 1)])
+  }
   done.value = new Set()
   turn.value = 0
   scores.value = [0, 0]
@@ -123,7 +129,7 @@ function choose(n) {
   if (picked.value !== null) return
   picked.value = n
   if (ok.value) {
-    scores.value[turn.value % 2] += 10
+    scores.value[turn.value % 2] += points.value[current.value]
     pop.value = true
     setTimeout(() => (pop.value = false), 500)
   }
@@ -229,7 +235,7 @@ const panel = 'rounded-3xl border-2 border-[#607bc2] bg-[#152454]/90 p-3 shadow-
           </button>
         </div>
         <div class="my-4 min-h-8 text-lg font-black" :class="ok ? 'text-[#a9ffcb]' : 'text-[#ffd6a3]'" aria-live="polite">
-          <template v-if="picked !== null">{{ ok ? '🌟 Correct! +10 points!' : `💪 Nice try! The correct answer is ${q.result}.` }}</template>
+          <template v-if="picked !== null">{{ ok ? '🌟 Correct! +${points[current]} points!' : `💪 Nice try! The correct answer is ${q.result}.` }}</template>
         </div>
         <div class="flex flex-wrap justify-center gap-2.5">
           <button :class="btn" class="bg-[#c4d8ff]" @click="showHint = !showHint">💡 Show a Using-10 Hint</button>
@@ -238,7 +244,7 @@ const panel = 'rounded-3xl border-2 border-[#607bc2] bg-[#152454]/90 p-3 shadow-
         <div v-if="showHint" class="mt-3 rounded-2xl border border-[#9bcaff] bg-[#243c76] p-3 text-left leading-relaxed">{{ hint }}</div>
       </section>
 
-      <div class="mt-4 text-center text-xs text-[#d1dcff]">No answers are shown until a team makes a choice. Hints are optional. Questions change every new game.</div>
+      <div class="mt-4 text-center text-xs text-[#d1dcff]">Each planet awards surprise points (5–30) for a correct answer. No answers are shown until a team chooses. Questions and points change every new game.</div>
     </div>
   </div>
 </template>
