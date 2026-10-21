@@ -235,7 +235,7 @@ const panel = 'rounded-3xl border-2 border-[#607bc2] bg-[#152454]/90 p-3 shadow-
           </button>
         </div>
         <div class="my-4 min-h-8 text-lg font-black" :class="ok ? 'text-[#a9ffcb]' : 'text-[#ffd6a3]'" aria-live="polite">
-          <template v-if="picked !== null">{{ ok ? '🌟 Correct! +${points[current]} points!' : `💪 Nice try! The correct answer is ${q.result}.` }}</template>
+          <template v-if="picked !== null">{{ ok ? `🌟 Correct! +${points[current]} points!` : `💪 Nice try! The correct answer is ${q.result}.` }}</template>
         </div>
         <div class="flex flex-wrap justify-center gap-2.5">
           <button :class="btn" class="bg-[#c4d8ff]" @click="showHint = !showHint">💡 Show a Using-10 Hint</button>
