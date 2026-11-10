@@ -37,6 +37,15 @@
       buttonText: 'Start',
       buttonBg: 'from-indigo-700 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 shadow-[0_4px_14px_rgba(79,70,229,0.4)]'
     },
+    { 
+      id: 'place_value', 
+      emoji: '🏰', 
+      title: 'Place Value Adventure', 
+      desc: 'Grade 2 Hundreds, Tens & Ones',
+      type: 'place',
+      buttonText: 'Start',
+      buttonBg: 'from-purple-700 to-purple-600 hover:from-purple-600 hover:to-purple-500 shadow-[0_4px_14px_rgba(126,34,206,0.4)]'
+    },
   ]
 </script>
 
@@ -100,6 +109,12 @@
           <div v-if="g.type === 'quest'" class="flex items-center justify-center gap-3 mb-6 bg-slate-50 py-3 px-4 rounded-2xl border border-slate-100 text-sm font-bold text-slate-600">
             <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">17 − 7 = ?</span>
             <span class="text-lg">🪐</span>
+          </div>
+
+          <div v-if="g.type === 'place'" class="flex items-center justify-center gap-2 mb-6 bg-slate-50 py-3 px-4 rounded-2xl border border-slate-100 text-sm font-bold">
+            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">🔷 H</span>
+            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">🟩 T</span>
+            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">🟨 O</span>
           </div>
         </div>
 
