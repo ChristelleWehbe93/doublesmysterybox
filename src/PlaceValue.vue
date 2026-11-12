@@ -43,7 +43,7 @@ function makeQuestion(n) {
     wrong = [`${h * 100} + ${o * 10} + ${t}`, `${h * 100} + ${t} + ${o * 10}`, `${h * 100} + ${t * 10} + ${o + 1}`]
   } else if (type === 2) {
     const p = rand(3), v = [h, t, o][p], mul = [100, 10, 1][p]
-    prompt = `🕵️ What is the value of the digit ${v} in ${n}?`
+    prompt = `🕵️ What is the value of the digit in the ${['HUNDREDS', 'TENS', 'ONES'][p]} place in ${n}?`
     correct = String(v * mul)
     wrong = [v, v * 10, v * 100, (v + 1) * mul]
   } else if (type === 3) {
@@ -59,7 +59,7 @@ function makeQuestion(n) {
   for (let k = 1; opts.length < 3; k++) if (!opts.includes(String(n + k * 7))) opts.push(String(n + k * 7))
   // always keep the correct answer, then trim to 3 options
   const options = shuffle([correct, ...shuffle(opts.filter((x) => x !== correct)).slice(0, 2)])
-  return { n, h, t, o, type, prompt, correct, options }
+  return { n, h, t, o, type, prompt, correct, options, points: [10, 15, 20, 25, 30][type] }
 }
 
 const screen = ref('home')
@@ -123,7 +123,7 @@ function pick(v) {
   if (picked.value !== null) return
   picked.value = v
   if (ok.value) {
-    scores.value[turn.value] += 10
+    scores.value[turn.value] += q.value.points
     confetti()
   }
 }
@@ -215,7 +215,7 @@ function confetti() {
           {{ n }}<strong class="block text-3xl">⭐ {{ scores[i] }}</strong>{{ turn === i ? '🎯 YOUR TURN' : '' }}
         </div>
       </div>
-      <p class="mt-3 text-center">🌟 Challenge {{ pos + 1 }} of {{ queue.length }} • +10 points</p>
+      <p class="mt-3 text-center">🌟 Challenge {{ pos + 1 }} of {{ queue.length }} • ⭐ {{ q.points }} points</p>
       <div class="mt-2 h-4 overflow-hidden rounded-full bg-[#d7e4f6]">
         <div class="h-full bg-gradient-to-r from-[#f5a830] to-[#ffdf5b] transition-all" :style="{ width: (pos / queue.length) * 100 + '%' }"></div>
       </div>
@@ -245,7 +245,7 @@ function confetti() {
         </button>
       </div>
       <p class="my-3 min-h-9 text-center text-xl font-black" aria-live="polite">
-        <template v-if="picked !== null">{{ ok ? '🎉 AWESOME! +10 POINTS!' : `💪 GOOD TRY! The answer is ${q.correct}` }}</template>
+        <template v-if="picked !== null">{{ ok ? `🎉 AWESOME! +${q.points} POINTS!` : `💪 GOOD TRY! The answer is ${q.correct}` }}</template>
       </p>
       <div v-if="picked !== null" class="text-center">
         <button :class="btn" @click="advance">{{ pos === queue.length - 1 ? '🏆 SEE RESULTS' : 'NEXT CHALLENGE ➜' }}</button>
